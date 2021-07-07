@@ -277,9 +277,12 @@ function calcScores(tree, config) {
 			// Spache suffixes per https://readabilityformulas.com/spache-readability-formula.php
 			const reSuffixes = /(s|ing|ed)$/
 
+			const reNumber = /^[1-9]\d{0,2}(,?\d{3})*$/
+
 			if (
 				bInitCapAsName ||
 				spache.indexOf(normalized) > -1 ||
+				normalized.match(reNumber) ||
 				(normalized.match(reSuffixes) &&
 					spacheStems[stemmer(normalized)])
 			) {
