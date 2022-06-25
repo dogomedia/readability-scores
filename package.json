@@ -1,6 +1,19 @@
 {
   "name": "readability-scores",
   "version": "1.0.8",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "index.d.ts": [
+        "dist/index.d.ts"
+      ]
+    }
+  },
+  "type": "module",
   "description": "Tests the readability of a string using multiple formulas",
   "license": "MIT",
   "keywords": [
@@ -31,57 +44,51 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "files": [
-    "index.js",
-    "index.d.ts"
+    "dist/index.js",
+    "dist/index.d.ts"
   ],
-  "types": "index.d.ts",
   "dependencies": {
-    "automated-readability": "^1.0.5",
-    "coleman-liau": "^1.0.5",
-    "dale-chall": "^1.0.4",
-    "dale-chall-formula": "^1.0.5",
-    "flesch": "^1.0.5",
+    "automated-readability": "^2.0.0",
+    "coleman-liau": "^2.0.0",
+    "dale-chall": "^2.0.0",
+    "dale-chall-formula": "^2.0.0",
+    "flesch": "^2.0.0",
+    "flesch-kincaid": "^2.0.0",
     "global": "^4.4.0",
-    "gunning-fog": "^1.0.6",
-    "nlcst-normalize": "^2.1.4",
-    "nlcst-to-string": "^2.0.4",
-    "retext-english": "^3.0.4",
-    "smog-formula": "^1.0.5",
-    "spache": "^1.1.5",
-    "spache-formula": "^1.0.5",
-    "stemmer": "^1.0.5",
-    "syllable": "^4.1.0",
-    "unified": "^9.0.0",
-    "unist-util-visit": "^2.0.2"
+    "gunning-fog": "^2.0.0",
+    "nlcst-normalize": "^3.1.0",
+    "nlcst-to-string": "^3.1.0",
+    "retext-english": "^4.1.0",
+    "smog-formula": "^2.0.0",
+    "spache": "^2.0.0",
+    "spache-formula": "^2.0.0",
+    "stemmer": "^2.0.0",
+    "syllable": "^5.0.0",
+    "unified": "^10.1.2",
+    "unist-util-visit": "^4.1.0"
   },
   "devDependencies": {
-    "browserify": "^16.5.1",
-    "nyc": "^15.0.1",
+    "@types/tape": "^4.0.0",
+    "c8": "^7.0.0",
     "prettier": "^2.0.5",
-    "remark-cli": "^8.0.0",
-    "remark-preset-wooorm": "^7.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-wooorm": "^8.0.0",
+    "rimraf": "^3.0.0",
     "tape": "^5.0.0",
     "tinyify": "^2.5.2",
-    "xo": "^0.30.0"
+    "typescript": "^4.0.0",
+    "xo": "^0.38.0"
   },
   "scripts": {
-    "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
-    "build-bundle": "browserify . -s readabilityScores -o readability-scores.js",
-    "build-mangle": "browserify . -s readabilityScores -p tinyify -o readability-scores.min.js",
-    "build": "npm run build-bundle && npm run build-mangle",
-    "test-api": "node test",
-    "test-coverage": "nyc --reporter lcov tape test.js",
-    "test": "npm run format && npm run build && npm run test-coverage"
-  },
-  "nyc": {
-    "check-coverage": true,
-    "lines": 100,
-    "functions": 100,
-    "branches": 100
+    "build": "rimraf dist && tsc",
+    "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
+    "test-api": "npm run build && node dist/test.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node dist/test.js",
+    "test": "npm run format && npm run test-coverage"
   },
   "prettier": {
-    "tabWidth": 4,
-    "useTabs": true,
+    "tabWidth": 2,
+    "useTabs": false,
     "singleQuote": true,
     "bracketSpacing": false,
     "semi": false,
@@ -89,14 +96,11 @@
   },
   "xo": {
     "prettier": true,
-    "esnext": false,
-    "ignores": [
-      "readability-scores.js"
-    ],
     "rules": {
-		"unicorn/no-for-loop": "off",
+      "unicorn/no-for-loop": "off",
       "unicorn/prefer-includes": "off"
-    }},
+    }
+  },
   "remarkConfig": {
     "plugins": [
       "preset-wooorm"
